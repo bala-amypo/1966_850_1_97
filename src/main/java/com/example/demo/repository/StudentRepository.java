@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.Student;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+public interface StudentRepository extends JpaRepository<Student,Long>{
+    Optional<Student> findByEmail(String email);
+    Optional<Student> findByRollNumber(String rollNumber);
 
 }
