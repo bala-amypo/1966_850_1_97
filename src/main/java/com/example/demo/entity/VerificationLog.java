@@ -1,15 +1,15 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "verification_logs")
-@Getter
-@Setter
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class VerificationLog {
@@ -24,6 +24,5 @@ public class VerificationLog {
 
     private String ipAddress;
 
-    @Builder.Default
-    private LocalDateTime verifiedAt = LocalDateTime.now();
+    private LocalDateTime verifiedAt;
 }
