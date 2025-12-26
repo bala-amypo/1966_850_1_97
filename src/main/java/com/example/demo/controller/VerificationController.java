@@ -24,7 +24,7 @@ public class VerificationController {
     @PostMapping("/{verificationCode}")
     @Operation(summary = "Verify a certificate and log the attempt")
     public ResponseEntity<VerificationLog> verify(@PathVariable String verificationCode, HttpServletRequest request) {
-        // Reads client IP from request for audit logging
+        
         String clientIp = request.getRemoteAddr();
         return ResponseEntity.ok(verificationService.verifyCertificate(verificationCode, clientIp));
     }

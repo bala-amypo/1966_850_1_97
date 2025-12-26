@@ -16,7 +16,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // Constructor injection required by Test 19
+    
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
@@ -24,14 +24,14 @@ public class StudentController {
     @PostMapping
     @Operation(summary = "Add a new student")
     public ResponseEntity<Student> add(@RequestBody Student student) {
-        // Test suite looks for the method name "add" via reflection
+        
         return ResponseEntity.ok(studentService.addStudent(student));
     }
 
     @GetMapping
     @Operation(summary = "Get all students")
     public ResponseEntity<List<Student>> list() {
-        // Test suite looks for the method name "list" via reflection
+       
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 }
