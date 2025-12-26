@@ -2,6 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Certificate;
 
+import java.util.Optional;
+
 public interface CertificateService {
-    Certificate save(Certificate certificate);
+
+    Optional<Certificate> getCertificateByVerificationCode(String verificationCode);
 }
