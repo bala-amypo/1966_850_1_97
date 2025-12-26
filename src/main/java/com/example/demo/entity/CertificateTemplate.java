@@ -1,36 +1,15 @@
 package com.example.demo.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
-@Entity
-@Table(name = "certificate_templates", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "templateName")
-})
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Entity @Table(name = "certificate_templates")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class CertificateTemplate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String templateName;
-
-    @Column(nullable = false)
     private String backgroundUrl;
-
     private String fontStyle;
-
     private String signatureName;
-
-    @OneToMany(mappedBy = "template")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Certificate> certificates;
 }
