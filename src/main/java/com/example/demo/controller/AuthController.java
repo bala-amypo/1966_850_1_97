@@ -5,33 +5,43 @@ import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
+
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody User user) {
 
         User savedUser = userService.register(user);
 
-        String token = jwtUtil.generateToken(savedUser.getEmail());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", savedUser.getId());
+        claims.put("role", savedUser.getRole());
 
-        AuthResponse response = new AuthResponse(
-                token,
-                savedUser.getId(),
-                savedUser.getEmail(),
-                savedUser.getRole()
+        String token = jwtUtil.generateToken(claims, savedUser.getEmail());
+
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        token,
+                        savedUser.getId(),
+                        savedUser.getEmail(),
+                        savedUser.getRole()
+                )
         );
-
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -39,19 +49,23 @@ public class AuthController {
 
         User user = userService.findByEmail(request.getEmail());
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (user == null || !user.getPassword().equals(request.getPassword())) {
             return ResponseEntity.status(401).build();
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("role", user.getRole());
 
-        AuthResponse response = new AuthResponse(
-                token,
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
+        String token = jwtUtil.generateToken(claims, user.getEmail());
+
+        return ResponseEntity.ok(
+                new AuthResponse(
+                        token,
+                        user.getId(),
+                        user.getEmail(),
+                        user.getRole()
+                )
         );
-
-        return ResponseEntity.ok(response);
     }
 }
