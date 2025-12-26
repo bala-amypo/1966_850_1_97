@@ -19,16 +19,19 @@ public class AuthController {
 
     public User register(RegisterRequest request) {
         User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole());
+        user.setName(request.name);
+        user.setEmail(request.email);
+        user.setPassword(request.password);
+        user.setRole(request.role);
         return userService.register(user);
     }
 
     public AuthResponse login(AuthRequest request) {
-        User user = userService.login(request.getEmail(), request.getPassword());
+        User user = userService.login(request.email, request.password);
         String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token);
+
+        AuthResponse response = new AuthResponse();
+        response.token = token;
+        return response;
     }
 }
