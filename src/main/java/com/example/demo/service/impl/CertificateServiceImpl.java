@@ -5,17 +5,19 @@ import com.example.demo.repository.CertificateRepository;
 import com.example.demo.service.CertificateService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
-    private final CertificateRepository repository;
+    private final CertificateRepository certificateRepository;
 
-    public CertificateServiceImpl(CertificateRepository repository) {
-        this.repository = repository;
+    public CertificateServiceImpl(CertificateRepository certificateRepository) {
+        this.certificateRepository = certificateRepository;
     }
 
     @Override
-    public Certificate save(Certificate certificate) {
-        return repository.save(certificate);
+    public Optional<Certificate> getCertificateByVerificationCode(String verificationCode) {
+        return certificateRepository.findByVerificationCode(verificationCode);
     }
 }
