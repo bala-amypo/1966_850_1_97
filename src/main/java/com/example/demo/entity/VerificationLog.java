@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "verification_logs")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,11 +17,14 @@ public class VerificationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String verificationCode;
+    // Many logs -> one certificate
+    @ManyToOne
+    @JoinColumn(name = "certificate_id")
+    private Certificate certificate;
+
+    private LocalDateTime verifiedAt;
 
     private String status;
 
     private String ipAddress;
-
-    private LocalDateTime verifiedAt;
 }
