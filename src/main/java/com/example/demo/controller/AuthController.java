@@ -6,7 +6,9 @@ import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,53 +20,49 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // ✔ Constructor REQUIRED by tests
     public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
-    // ---------------- REGISTER ----------------
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<User> register(@RequestBody RegisterRequest req) {
 
         User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .role(request.getRole()) // may be null → service sets STAFF
+                .name(req.getName())
+                .email(req.getEmail())
+                .password(passwordEncoder.encode(req.getPassword()))
+                .role(req.getRole() == null ? "STAFF" : req.getRole())
                 .build();
 
-        User saved = userService.register(user);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(userService.register(user));
     }
 
-    // ---------------- LOGIN ----------------
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 
-        try {
-            User user = userService.findByEmail(request.getEmail());
-
-            // ❌ Password mismatch
-            if (!new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder()
-                    .matches(request.getPassword(), user.getPassword())) {
-                return ResponseEntity.status(401).build();
-            }
-
-            // ✔ Claims required by test t51
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("userId", user.getId());
-            claims.put("email", user.getEmail());
-            claims.put("role", user.getRole());
-
-            String token = jwtUtil.generateToken(claims, user.getEmail());
-
-            return ResponseEntity.ok(new AuthResponse(token));
-
-        } catch (Exception e) {
+        User user = userService.findByEmail(request.getEmail());
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401).build();
         }
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole());
+
+        String token = jwtUtil.generateToken(claims, user.getEmail());
+
+        // ✅ FIX: pass all required fields
+        AuthResponse response = new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
