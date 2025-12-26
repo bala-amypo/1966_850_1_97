@@ -7,8 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface CertificateTemplateRepository extends JpaRepository<CertificateTemplate, Long> {
-    /**
-     * Used to detect duplicate template names before saving.
-     */
+    
     Optional<CertificateTemplate> findByTemplateName(String templateName);
 }
