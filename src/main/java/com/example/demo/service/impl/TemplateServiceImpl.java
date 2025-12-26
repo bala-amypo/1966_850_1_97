@@ -20,9 +20,9 @@ public class TemplateServiceImpl implements TemplateService {
         if (templateRepository.findByTemplateName(template.getTemplateName()).isPresent()) {
             throw new RuntimeException("Template name exists");
         }
-        // Basic URL validation if required by business rule
+        
         if (template.getBackgroundUrl() == null || !template.getBackgroundUrl().startsWith("http")) {
-             // Optional validation based on PDF 6.3
+             
         }
         return templateRepository.save(template);
     }
