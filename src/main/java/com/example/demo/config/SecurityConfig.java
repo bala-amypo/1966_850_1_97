@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Requirement 8.3: Disable CSRF
+            .csrf(csrf -> csrf.disable()) 
             
             // MANDATORY FOR CLOUD IDE: Allows the preview to load inside the Amypo iframe
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
