@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String role = (String) claims.get("role");
 
                 if (email != null) {
-                    // Create authority from role (e.g., ROLE_ADMIN or ROLE_STAFF)
+                    
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             email, 
                             null, 
