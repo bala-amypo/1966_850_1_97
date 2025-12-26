@@ -4,8 +4,6 @@ import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.security.JwtUtil;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,21 +11,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
 
-    public AuthController(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+    public AuthController(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
-
-        UserDetails userDetails =
-                userDetailsService.loadUserByUsername(request.getEmail());
-
-        String token = jwtUtil.generateToken(userDetails);
-
+        // ✅ PASS STRING ONLY
+        String token = jwtUtil.generateToken(request.getEmail());
         return new AuthResponse(token);
     }
 
