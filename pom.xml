@@ -110,33 +110,22 @@
     <artifactId>maven-compiler-plugin</artifactId>
     <version>3.13.0</version>
 
-    <executions>
-        <!-- Compile main source with Java 17 -->
-        <execution>
-            <id>default-compile</id>
-            <phase>compile</phase>
-            <goals>
-                <goal>compile</goal>
-            </goals>
-            <configuration>
-                <source>17</source>
-                <target>17</target>
-            </configuration>
-        </execution>
+    <configuration>
+        <!-- Main application -->
+        <release>17</release>
 
-        <!-- Compile test source with Java 8 (for lombok.var) -->
-        <execution>
-            <id>default-testCompile</id>
-            <phase>test-compile</phase>
-            <goals>
-                <goal>testCompile</goal>
-            </goals>
-            <configuration>
-                <source>8</source>
-                <target>8</target>
-            </configuration>
-        </execution>
-    </executions>
+        <!-- Tests ONLY (required for lombok.var) -->
+        <testRelease>8</testRelease>
+
+        <!-- Enable Lombok for tests -->
+        <annotationProcessorPaths>
+            <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.30</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
 </plugin>
 
 			<plugin>
