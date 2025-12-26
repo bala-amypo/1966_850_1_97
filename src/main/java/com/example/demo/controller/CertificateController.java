@@ -1,28 +1,44 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Certificate;
-import com.example.demo.service.CertificateService;
+import com.example.demo.entity.DigitalCertificate;
+import com.example.demo.service.DigitalCertificateService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/certificates")
 public class CertificateController {
 
-    private final CertificateService certificateService;
+    private final DigitalCertificateService certificateService;
 
-    public CertificateController(CertificateService certificateService) {
+    public CertificateController(DigitalCertificateService certificateService) {
         this.certificateService = certificateService;
     }
 
-    public Certificate generateCertificate(Long studentId, Long templateId) {
-        return certificateService.generateCertificate(studentId, templateId);
+    @PostMapping
+    public ResponseEntity<DigitalCertificate> create(
+            @RequestBody DigitalCertificate certificate) {
+
+        DigitalCertificate saved = certificateService.createCertificate(certificate);
+        return ResponseEntity.ok(saved);
     }
 
-    public Certificate getCertificate(Long id) {
-        return certificateService.getCertificate(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<DigitalCertificate> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(certificateService.getCertificateById(id));
     }
 
-    public List<Certificate> getCertificatesByStudent(Long studentId) {
-        return certificateService.findByStudentId(studentId);
+    @GetMapping
+    public ResponseEntity<List<DigitalCertificate>> getAll() {
+        return ResponseEntity.ok(certificateService.getAllCertificates());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        certificateService.deleteCertificate(id);
+        return ResponseEntity.ok("Certificate deleted successfully");
     }
 }
-
