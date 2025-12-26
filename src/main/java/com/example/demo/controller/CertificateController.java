@@ -25,3 +25,4 @@ public class CertificateController {
         return certificateService.findByStudentId(studentId);
     }
 }
+
