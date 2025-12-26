@@ -1,12 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +25,6 @@ public class User {
 
     private String password;
 
-    @Builder.Default
-    private String role = "STAFF";
+    // ADMIN / STAFF
+    private String role;
 }
