@@ -1,12 +1,13 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
+import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Override
-    public String getUserByUsername(String username) {
-        return username;
+    public String findByEmail(String email) {
+        return email;
     }
 }
