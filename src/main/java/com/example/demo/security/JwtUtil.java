@@ -13,8 +13,8 @@ public class JwtUtil {
 
     private static final String SECRET_KEY = "secret123";
 
+    // ✅ Generate token
     public String generateToken(Map<String, Object> claims, String subject) {
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -24,10 +24,22 @@ public class JwtUtil {
                 .compact();
     }
 
+    // ✅ Extract all claims
     public Claims extractClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    // ✅ Validate token
+    public boolean validateToken(String token) {
+        try {
+            extractClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
+
