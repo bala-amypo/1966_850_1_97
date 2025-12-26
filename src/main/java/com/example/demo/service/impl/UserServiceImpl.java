@@ -6,11 +6,8 @@ import com.example.demo.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -20,11 +17,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        Optional<User> existing = userRepository.findByEmail(user.getEmail());
-        if (existing.isPresent()) {
-            throw new RuntimeException("User email already exists");
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email exists");
         }
-        if (user.getRole() == null) {
+        if (user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("STAFF");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
