@@ -7,13 +7,9 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    /**
-     * Used to prevent duplicate registration via email.
-     */
+    
     Optional<Student> findByEmail(String email);
 
-    /**
-     * Used to prevent duplicate registration via roll number.
-     */
+    
     Optional<Student> findByRollNumber(String rollNumber);
 }
