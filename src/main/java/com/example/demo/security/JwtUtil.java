@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    // Must be at least 32 characters. This one is 64 characters (512 bits).
+    
     private String secret = "9a67471a2bc916670c538749a04473874052345d6255656241762354124a6354";
     private Long expiration = 3600000L;
 
