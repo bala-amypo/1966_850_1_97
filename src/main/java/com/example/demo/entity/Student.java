@@ -3,13 +3,14 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "students", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email"),
         @UniqueConstraint(columnNames = "rollNumber")
 })
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,4 +27,9 @@ public class Student {
 
     @Column(nullable = false, unique = true)
     private String rollNumber;
+
+    @OneToMany(mappedBy = "student")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Certificate> certificates;
 }
