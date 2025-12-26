@@ -2,13 +2,17 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.VerificationLog;
 import com.example.demo.service.VerificationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/verify")
+@Tag(name = "Verification", description = "Endpoints for certificate verification and audit logs")
 public class VerificationController {
 
     private final VerificationService verificationService;
@@ -17,17 +21,17 @@ public class VerificationController {
         this.verificationService = verificationService;
     }
 
-    // method name "verify" not used by tests, but endpoint is required
     @PostMapping("/{verificationCode}")
-    public VerificationLog verify(@PathVariable String verificationCode,
-                                  HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        return verificationService.verifyCertificate(verificationCode, ip);
+    @Operation(summary = "Verify a certificate and log the attempt")
+    public ResponseEntity<VerificationLog> verify(@PathVariable String verificationCode, HttpServletRequest request) {
+        // Reads client IP from request for audit logging
+        String clientIp = request.getRemoteAddr();
+        return ResponseEntity.ok(verificationService.verifyCertificate(verificationCode, clientIp));
     }
 
-    // method name "logs" not used by tests, but endpoint is required
     @GetMapping("/logs/{certificateId}")
-    public List<VerificationLog> logs(@PathVariable Long certificateId) {
-        return verificationService.getLogsByCertificate(certificateId);
+    @Operation(summary = "Get all verification attempts for a specific certificate")
+    public ResponseEntity<List<VerificationLog>> getLogs(@PathVariable Long certificateId) {
+        return ResponseEntity.ok(verificationService.getLogsByCertificate(certificateId));
     }
 }
