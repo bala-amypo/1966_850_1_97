@@ -7,8 +7,7 @@ import lombok.*;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,7 +22,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
+    // "ADMIN" or "STAFF"; default handled in service
+    @Column(nullable = false)
     private String role;
 }
