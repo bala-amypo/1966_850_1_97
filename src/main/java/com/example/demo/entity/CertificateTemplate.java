@@ -3,12 +3,13 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "certificate_templates", uniqueConstraints = {
         @UniqueConstraint(columnNames = "templateName")
 })
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,5 +22,15 @@ public class CertificateTemplate {
     @Column(nullable = false, unique = true)
     private String templateName;
 
+    @Column(nullable = false)
     private String backgroundUrl;
+
+    private String fontStyle;
+
+    private String signatureName;
+
+    @OneToMany(mappedBy = "template")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Certificate> certificates;
 }
